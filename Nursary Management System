@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+class Plant {
+public:
+    string plant_id;
+    string name;
+    string type;
+    double price;
+
+    Plant(string id, string n, string t, double p)
+        : plant_id(id), name(n), type(t), price(p) {}
+
+    void display() const {
+        cout << "Plant ID: " << plant_id << ", Name: " << name 
+                  << ", Type: " << type << ", Price: $" << fixed << setprecision(2) << price << '\n';
+    }
+};
+
+class NurseryManagementSystem {
+private:
+    vector<Plant> plants;
+
+public:
+    void addPlant(const Plant& plant) {
+        plants.push_back(plant);
+        cout << "Plant '" << plant.name << "' added successfully!\n";
+    }
+
+    void viewPlants() const {
+        if (plants.empty()) {
+            cout << "No plants available in the nursery.\n";
+        } else {
+            cout << "\nList of plants in the nursery:\n";
+            for (const auto& plant : plants) {
+                plant.display();
+            }
+        }
+    }
+
+    void removePlant(const string& plant_id) {
+        for (auto it = plants.begin(); it != plants.end(); ++it) {
+            if (it->plant_id == plant_id) {
+                cout << "Plant with ID '" << plant_id << "' removed successfully!\n";
+                plants.erase(it);
+                return;
+            }
+        }
+        cout << "No plant found with ID '" << plant_id << "'.\n";
+    }
+};
+
+int main() {
+    NurseryManagementSystem system;
+    int choice;
+
+    while (true) {
+        cout << "\nNursery Management System\n";
+        cout << "1. Add Plant\n";
+        cout << "2. View Plants\n";
+        cout << "3. Remove Plant\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            string plant_id, name, type;
+            double price;
+            cout << "Enter plant ID: ";
+            cin >> plant_id;
+            cout << "Enter plant name: ";
+            cin.ignore(); 
+            getline(cin, name);
+            cout << "Enter plant type: ";
+            getline(cin, type);
+            cout << "Enter plant price: ";
+            cin >> price;
+
+            Plant plant(plant_id, name, type, price);
+            system.addPlant(plant);
+        } else if (choice == 2) {
+            system.viewPlants();
+        } else if (choice == 3) {
+            string plant_id;
+            cout << "Enter plant ID to remove: ";
+            cin >> plant_id;
+            system.removePlant(plant_id);
+        } else if (choice == 4) {
+            cout << "Exiting the system. Goodbye!\n";
+            break;
+        } else {
+            cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+
+
